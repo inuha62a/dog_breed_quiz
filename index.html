@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>犬種当てクイズ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+  <div class="bg-white rounded-xl shadow-md p-6 w-96 text-center">
+    <h1 class="text-2xl font-bold mb-4">犬種当てクイズ</h1>
+
+    <!-- スタート画面 -->
+    <div id="start-screen" class="text-center">
+      <h2 class="text-xl font-bold mb-4">犬種当てクイズへようこそ！</h2>
+      <button id="start-btn" class="bg-green-500 text-white py-2 px-4 rounded">スタート</button>
+    </div>
+
+    <!-- クイズ画面 -->
+    <div id="quiz-container" class="hidden">
+      <img id="quiz-image" src="" alt="犬の写真" class="rounded mb-4">
+      <div id="choices" class="flex flex-col gap-2 mb-4"></div>
+      <div class="w-full bg-gray-300 h-2 mb-4">
+        <div id="timer-bar" class="bg-green-500 h-2" style="width: 100%"></div>
+      </div>
+      <div id="feedback" class="text-lg font-semibold mb-4 hidden"></div>
+      <button id="next-btn" class="bg-gray-500 text-white py-2 px-4 rounded hidden">次へ</button>
+    </div>
+
+    <!-- 結果画面 -->
+    <div id="result" class="hidden">
+      <p id="score-text" class="text-xl font-bold mb-4"></p>
+      <a id="tweet-btn" href="#" target="_blank" class="bg-blue-500 text-white py-2 px-4 rounded">結果をTwitterで共有</a>
+    </div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        image: '#',
+        choices: ['シベリアンハスキー', '柴犬', 'ビーグル'],
+        answer: '柴犬'
+      },
+      {
+        image: '#',
+        choices: ['ゴールデンレトリバー', 'パグ', 'ポメラニアン'],
+        answer: 'ゴールデンレトリバー'
+      },
+    ];
+
+    const startScreen = document.getElementById('start-screen');
+    const startBtn = document.getElementById('start-btn');
+    const quizImage = document.getElementById('quiz-image');
+    const choicesContainer = document.getElementById('choices');
+    const timerBar = document.getElementById('timer-bar');
+    const feedback = document.getElementById('feedback');
+    const nextBtn = document.getElementById('next-btn');
+    const quizContainer = document.getElementById('quiz-container');
+    const resultContainer = document.getElementById('result');
+    const scoreText = document.getElementById('score-text');
+    const tweetBtn = document.getElementById('tweet-btn');
+
+    let currentQuestion = 0;
+    let score = 0;
+    let timer;
+    let timeLeft = 5;
+
+    startBtn.addEventListener('click', () => {
+      startScreen.classList.add('hidden');
+      quizContainer.classList.remove('hidden');
+      loadQuestion();
+    });
+
+    function loadQuestion() {
+      const q = quizData[currentQuestion];
+      quizImage.src = q.image;
+      choicesContainer.innerHTML = '';
+      feedback.classList.add('hidden');
+      nextBtn.classList.add('hidden');
+
+      q.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.textContent = choice;
+        btn.className = 'choice-btn bg-blue-500 text-white py-2 rounded hover:bg-blue-600';
+        btn.addEventListener('click', () => handleAnswer(choice === q.answer));
+        choicesContainer.appendChild(btn);
+      });
+
+      startTimer();
+    }
+
+    function startTimer() {
+      timeLeft = 5;
+      timerBar.style.width = '100%';
+      timer = setInterval(() => {
+        timeLeft -= 0.1;
+        timerBar.style.width = (timeLeft / 5 * 100) + '%';
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          handleAnswer(false);
+        }
+      }, 100);
+    }
+
+    function handleAnswer(isCorrect) {
+      clearInterval(timer);
+      if (isCorrect) score++;
+      feedback.textContent = isCorrect ? `正解！${quizData[currentQuestion].answer}です！` : `不正解！正解は${quizData[currentQuestion].answer}です！`;
+      feedback.classList.remove('hidden');
+      document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+      nextBtn.classList.remove('hidden');
+    }
+
+    nextBtn.addEventListener('click', () => {
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    });
+
+    function showResult() {
+      quizContainer.classList.add('hidden');
+      scoreText.textContent = `あなたの正答率は ${score}/${quizData.length} です！`;
+      const tweetText = encodeURIComponent(`犬種クイズに挑戦！${score}問正解しました！`);
+      tweetBtn.href = `https://twitter.com/intent/tweet?text=${tweetText}`;
+      resultContainer.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
