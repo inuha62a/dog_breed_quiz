@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-  <html lang="ja">
+<html lang="ja">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>犬種当てクイズ！</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- OGP基本設定 -->
+    <meta property="og:title" content="犬種当てクイズ！">
+    <meta property="og:description" content="あなたは何問正解できる？ 犬の画像を見て犬種を当てるクイズです！">
+    <meta property="og:image" content="https://inuha62a.github.io/dog_breed_quiz/images/top.png">
+    <meta property="og:url" content="https://inuha62a.github.io/dog_breed_quiz/">
+    <meta property="og:type" content="website">
+
+    <!-- Twitterカード設定 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="犬種当てクイズ！">
+    <meta name="twitter:description" content="あなたは何問正解できる？ 犬の画像を見て犬種を当てるクイズです！">
+    <meta name="twitter:image" content="https://inuha62a.github.io/dog_breed_quiz/images/top.png">
+    <meta property="og:image:width" content="900" />
+    <meta property="og:image:height" content="630" />
   </head>
   <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
     <div class="bg-white rounded-xl shadow-md p-6 w-96 text-center">
@@ -30,47 +45,19 @@
       <!-- 結果画面 -->
       <div id="result" class="hidden">
         <p id="score-text" class="text-xl font-bold mb-4"></p>
-        <a id="tweet-btn" href="#" target="_blank" class="bg-blue-500 text-white py-2 px-4 rounded">結果をTwitterで共有</a>
+        <a id="tweet-btn" href="#" target="_blank" class="bg-blue-500 text-white py-2 px-4 rounded">結果をX(Twitter)で共有</a>
       </div>
     </div>
 
     <script>
       const quizData = [
-        {
-          image: 'images/shiba.jpg',
-          choices: ['シベリアンハスキー', '柴犬', 'ビーグル'],
-          answer: '柴犬'
-        },
-        {
-          image: 'images/toy_poodle.jpg',
-          choices: ['プーリ', 'ビションフリーゼ', 'トイプードル'],
-          answer: 'トイプードル'
-        },
-        {
-          image: 'images/welsh_corgi.jpg',
-          choices: ['ウェルシュコーギー', '柴犬', 'ダックスフント'],
-          answer: 'ウェルシュコーギー'
-        },
-        {
-          image: 'images/border_collie.jpg',
-          choices: ['ボーダーコリー', 'シェットランドシープドッグ', '犬派'],
-          answer: 'ボーダーコリー'
-        },
-        {
-          image: 'images/miniature_schnauzer.jpg',
-          choices: ['ワイヤーフォックステリア', 'ミニチュアシュナウザー', 'ジャックラッセルテリア'],
-          answer: 'ミニチュアシュナウザー'
-        },
-        {
-          image: 'images/weimaraner.jpg',
-          choices: ['ラブラドールレトリバー', 'イングリッシュポインター', 'ワイマラナー'],
-          answer: 'ワイマラナー'
-        },
-        {
-          image: 'images/pug.jpg',
-          choices: ['パグ', 'チャウチャウ', 'オッサン'],
-          answer: 'パグ'
-        },
+        { image: 'images/shiba.jpg', choices: ['シベリアンハスキー', '柴犬', 'ビーグル'], answer: '柴犬' },
+        { image: 'images/toy_poodle.jpg', choices: ['プーリ', 'ビションフリーゼ', 'トイプードル'], answer: 'トイプードル' },
+        { image: 'images/welsh_corgi.jpg', choices: ['ウェルシュコーギー', '柴犬', 'ダックスフント'], answer: 'ウェルシュコーギー' },
+        { image: 'images/border_collie.jpg', choices: ['ボーダーコリー', 'シェットランドシープドッグ', '犬派'], answer: 'ボーダーコリー' },
+        { image: 'images/miniature_schnauzer.jpg', choices: ['ワイヤーフォックステリア', 'ミニチュアシュナウザー', 'ジャックラッセルテリア'], answer: 'ミニチュアシュナウザー' },
+        { image: 'images/weimaraner.jpg', choices: ['ラブラドールレトリバー', 'イングリッシュポインター', 'ワイマラナー'], answer: 'ワイマラナー' },
+        { image: 'images/pug.jpg', choices: ['チャウチャウ', 'パグ', 'オッサン'], answer: 'パグ' }
       ];
 
       const startScreen = document.getElementById('start-screen');
@@ -130,7 +117,9 @@
       function handleAnswer(isCorrect) {
         clearInterval(timer);
         if (isCorrect) score++;
-        feedback.textContent = isCorrect ? `正解！${quizData[currentQuestion].answer}です！` : `不正解！正解は${quizData[currentQuestion].answer}です！`;
+        feedback.textContent = isCorrect
+          ? `正解！${quizData[currentQuestion].answer}です！`
+          : `不正解！正解は${quizData[currentQuestion].answer}です！`;
         feedback.classList.remove('hidden');
         document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
         nextBtn.classList.remove('hidden');
@@ -148,8 +137,12 @@
       function showResult() {
         quizContainer.classList.add('hidden');
         scoreText.textContent = `あなたの正答率は ${score}/${quizData.length} です！`;
+
         const tweetText = encodeURIComponent(`犬種当てクイズに挑戦！${quizData.length}問中${score}問正解しました！`);
-        tweetBtn.href = `https://twitter.com/intent/tweet?text=${tweetText}`;
+        const tweetUrl = encodeURIComponent('https://inuha62a.github.io/dog_breed_quiz/');
+        const tweetHashtags = encodeURIComponent('犬種当てクイズ');
+        tweetBtn.href = `https://twitter.com/intent/tweet?text=${tweetText}&url=${tweetUrl}&hashtags=${tweetHashtags}`;
+
         resultContainer.classList.remove('hidden');
       }
     </script>
