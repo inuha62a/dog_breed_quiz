@@ -137,9 +137,9 @@
 
         const tweetText = encodeURIComponent(`犬種当てクイズに挑戦！${quizData.length}問中${score}問正解しました！`);
         const tweetUrl = encodeURIComponent('https://inuha62a.github.io/dog_breed_quiz/');
-        const tweetHashtags = encodeURIComponent('犬種当てクイズ');
+        const tweetHashtags = encodeURIComponent('#犬種当てクイズ');
 
-        tweetBtn.href = `https://twitter.com/intent/tweet?text=${tweetText}%0A${tweetUrl}%0A#${tweetHashtags}`;
+        tweetBtn.href = `https://twitter.com/intent/tweet?text=${tweetText}%0A${tweetUrl}%0A${tweetHashtags}`;
         resultContainer.classList.remove('hidden');
       }
     </script>
