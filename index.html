@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
+  <head prefix="og: https://ogp.me/ns#">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>犬種当てクイズ！</title>
@@ -18,8 +18,6 @@
     <meta name="twitter:title" content="犬種当てクイズ！">
     <meta name="twitter:description" content="あなたは何問正解できる？ 犬の画像を見て犬種を当てるクイズです！">
     <meta name="twitter:image" content="https://inuha62a.github.io/dog_breed_quiz/images/top.png">
-    <meta property="og:image:width" content="900" />
-    <meta property="og:image:height" content="630" />
   </head>
   <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
     <div class="bg-white rounded-xl shadow-md p-6 w-96 text-center">
@@ -27,7 +25,6 @@
       <!-- スタート画面 -->
       <div id="start-screen" class="text-center">
         <img src="images/top.png" alt="犬種当てクイズ！" class="mb-4 rounded">
-        <h2 class="text-xl font-bold mb-4">犬種当てクイズへようこそ！</h2>
         <button id="start-btn" class="bg-green-500 text-white py-2 px-4 rounded">スタート</button>
       </div>
 
@@ -139,7 +136,9 @@
         scoreText.textContent = `あなたの正答率は ${score}/${quizData.length} です！`;
 
         const tweetText = encodeURIComponent(`犬種当てクイズに挑戦！${quizData.length}問中${score}問正解しました！`);
+
         const tweetUrl = encodeURIComponent('https://inuha62a.github.io/dog_breed_quiz/');
+
         const tweetHashtags = encodeURIComponent('犬種当てクイズ');
         tweetBtn.href = `https://twitter.com/intent/tweet?text=${tweetText}&url=${tweetUrl}&hashtags=${tweetHashtags}`;
 
