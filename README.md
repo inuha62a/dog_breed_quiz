@@ -1,4 +1,4 @@
-# 犬種当てクイズ！
+# 犬種当てクイズ
 
 https://inuha62a.github.io/dog_breed_quiz/
 
