@@ -103,11 +103,28 @@
       function handleAnswer(isCorrect) {
         clearInterval(timer);
         if (isCorrect) score++;
+
+        // 選択肢ボタンの色を変更
+        const q = quizData[currentQuestion];
+        const buttons = document.querySelectorAll('.choice-btn');
+        buttons.forEach(btn => {
+          btn.disabled = true;
+          if (btn.textContent === q.answer) {
+            // 正解の選択肢 → 赤
+            btn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+            btn.classList.add('bg-red-500');
+          } else {
+            // 不正解の選択肢 → 薄い青
+            btn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+            btn.classList.add('bg-blue-300');
+          }
+        });
+
+        // フィードバック表示
         feedback.textContent = isCorrect
-          ? `正解！${quizData[currentQuestion].answer}です！`
-          : `不正解！正解は${quizData[currentQuestion].answer}です！`;
+          ? `正解！${q.answer}です！`
+          : `不正解！正解は${q.answer}です！`;
         feedback.classList.remove('hidden');
-        document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
         nextBtn.classList.remove('hidden');
       }
 
